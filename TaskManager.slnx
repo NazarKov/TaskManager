@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="TaskManager.Migration/TaskManager.Migration.csproj" />
+  <Project Path="TaskManager/TaskManager.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="TaskManagerDataBase/TaskManagerDataBase.csproj" />
+</Solution>

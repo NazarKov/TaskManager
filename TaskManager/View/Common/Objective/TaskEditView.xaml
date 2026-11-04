@@ -1,0 +1,141 @@
+<ContentPage x:Class="TaskManager.View.Common.Objective.TaskEditView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TaskManager.ViewModel.Common.Objective"
+             x:DataType="vm:TaskEditViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource Background}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                             Spacing="16">
+ 
+            <Label Text="{Binding PageTitle}"
+                   Style="{StaticResource PageTitle}"/>
+ 
+            <Border Style="{StaticResource CardStyle}"
+                    Padding="16">
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="Основна інформація"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextMain}"/>
+ 
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Назва"
+                               Style="{StaticResource MutedText}"/>
+
+                        <Entry Text="{Binding Title}"
+                               Placeholder="Що потрібно зробити?"
+                               BackgroundColor="{StaticResource Background}"
+                               TextColor="{StaticResource TextMain}"
+                               PlaceholderColor="{StaticResource TextMuted}"/>
+                    </VerticalStackLayout>
+ 
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Опис"
+                               Style="{StaticResource MutedText}"/>
+
+                        <Editor Text="{Binding Description}"
+                                HeightRequest="100"
+                                BackgroundColor="{StaticResource Background}"
+                                TextColor="{StaticResource TextMain}"/>
+                    </VerticalStackLayout>
+ 
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Проєкт"
+                               Style="{StaticResource MutedText}"/>
+
+                        <Entry Text="{Binding ProjectName}"
+                               BackgroundColor="{StaticResource Background}"
+                               TextColor="{StaticResource TextMain}"/>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+ 
+            <Border Style="{StaticResource CardStyle}"
+                    Padding="16">
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="Параметри задачі"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextMain}"/>
+ 
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Пріоритет"
+                               Style="{StaticResource MutedText}"/>
+
+                        <Picker ItemsSource="{Binding PriorityOptions}"
+                                SelectedIndex="{Binding PriorityIndex}"
+                                BackgroundColor="{StaticResource Background}"
+                                TextColor="{StaticResource TextMain}"/>
+                    </VerticalStackLayout>
+ 
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Статус"
+                               Style="{StaticResource MutedText}"/>
+
+                        <Picker ItemsSource="{Binding StatusOptions}"
+                                SelectedIndex="{Binding StatusIndex}"
+                                BackgroundColor="{StaticResource Background}"
+                                TextColor="{StaticResource TextMain}"/>
+                    </VerticalStackLayout>
+ 
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Термін виконання"
+                               Style="{StaticResource MutedText}"/>
+
+                        <DatePicker Date="{Binding DueDate}"
+                                    BackgroundColor="{StaticResource Background}"
+                                    TextColor="{StaticResource TextMain}"/>
+                    </VerticalStackLayout>
+ 
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Моя задача"
+                               VerticalOptions="Center"
+                               TextColor="{StaticResource TextMain}"/>
+
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding IsMine}"
+                                OnColor="{StaticResource Primary}"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+ 
+            <VerticalStackLayout Spacing="10">
+
+                <Button Text="Зберегти"
+                        Command="{Binding SaveCommand}"
+                        Style="{StaticResource PrimaryButton}"/>
+
+                <Button Text="Видалити"
+                        Command="{Binding DeleteCommand}"
+                        IsVisible="{Binding CanDelete}"
+                        BackgroundColor="{StaticResource Danger}"
+                        TextColor="White"
+                        CornerRadius="12"/>
+
+                <Button Text="Скасувати"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{StaticResource Surface}"
+                        TextColor="{StaticResource TextMain}"
+                        BorderColor="{StaticResource CardBorder}"
+                        BorderWidth="1"
+                        CornerRadius="12"/>
+
+            </VerticalStackLayout>
+ 
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource Primary}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

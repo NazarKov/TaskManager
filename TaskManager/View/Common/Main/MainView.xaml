@@ -1,0 +1,272 @@
+<ContentPage x:Class="TaskManager.View.Common.Main.MainView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TaskManager.ViewModel.Common.Main"
+             xmlns:enum="clr-namespace:TaskManager.Model.Enum"
+             xmlns:models="clr-namespace:TaskManager.Model"
+             x:DataType="vm:MainViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource Background}">
+
+    <Grid Padding="20"
+          RowDefinitions="Auto,Auto,Auto,*"
+          RowSpacing="20">
+ 
+        <Grid ColumnDefinitions="*,Auto">
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Мої задачі"
+                       Style="{StaticResource PageTitle}"/>
+
+                <Label Text="Плануйте та контролюйте свою роботу"
+                       Style="{StaticResource PageSubtitle}"/>
+            </VerticalStackLayout>
+
+            <Button Grid.Column="1"
+                    Text="+"
+                    Style="{StaticResource IconButton}"
+                    VerticalOptions="Center"
+                    Command="{Binding AddTaskCommand}"/>
+
+        </Grid>
+ 
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,*"
+              RowDefinitions="Auto,Auto"
+              ColumnSpacing="12"
+              RowSpacing="12">
+
+            <Border Style="{StaticResource StatCard}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Всього задач"
+                           Style="{StaticResource MutedText}"/>
+
+                    <Label Text="{Binding TotalCount}"
+                           FontSize="27"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextMain}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Style="{StaticResource StatCard}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="До виконання"
+                           Style="{StaticResource MutedText}"/>
+
+                    <Label Text="{Binding TodoCount}"
+                           FontSize="27"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Warning}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Style="{StaticResource StatCard}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="В процесі"
+                           Style="{StaticResource MutedText}"/>
+
+                    <Label Text="{Binding InProgressCount}"
+                           FontSize="27"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource StatCard}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Виконано"
+                           Style="{StaticResource MutedText}"/>
+
+                    <Label Text="{Binding DoneCount}"
+                           FontSize="27"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Success}"/>
+                </VerticalStackLayout>
+            </Border>
+
+        </Grid>
+ 
+        <VerticalStackLayout Grid.Row="2"
+                             Spacing="12">
+
+            <SearchBar Placeholder="Пошук задач..."
+                       Style="{StaticResource SearchStyle}"
+                       Text="{Binding SearchText}"/>
+
+            <ScrollView Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never">
+
+                <HorizontalStackLayout Spacing="8">
+
+                    <Button Text="Усі"
+                            Style="{StaticResource FilterButton}"
+                            Command="{Binding SetFilterCommand}"
+                            CommandParameter="{x:Static enum:TaskFilter.All}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button"
+                                         Binding="{Binding IsAllFilter}"
+                                         Value="True">
+                                <Setter Property="BackgroundColor"
+                                        Value="{StaticResource Primary}"/>
+                                <Setter Property="TextColor"
+                                        Value="White"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                    <Button Text="Мої задачі"
+                            Style="{StaticResource FilterButton}"
+                            Command="{Binding SetFilterCommand}"
+                            CommandParameter="{x:Static enum:TaskFilter.Mine}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button"
+                                         Binding="{Binding IsMineFilter}"
+                                         Value="True">
+                                <Setter Property="BackgroundColor"
+                                        Value="{StaticResource Primary}"/>
+                                <Setter Property="TextColor"
+                                        Value="White"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                    <Button Text="Сьогодні"
+                            Style="{StaticResource FilterButton}"
+                            Command="{Binding SetFilterCommand}"
+                            CommandParameter="{x:Static enum:TaskFilter.Today}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button"
+                                         Binding="{Binding IsTodayFilter}"
+                                         Value="True">
+                                <Setter Property="BackgroundColor"
+                                        Value="{StaticResource Primary}"/>
+                                <Setter Property="TextColor"
+                                        Value="White"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                    <Button Text="Прострочені"
+                            Style="{StaticResource FilterButton}"
+                            Command="{Binding SetFilterCommand}"
+                            CommandParameter="{x:Static enum:TaskFilter.Overdue}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button"
+                                         Binding="{Binding IsOverdueFilter}"
+                                         Value="True">
+                                <Setter Property="BackgroundColor"
+                                        Value="{StaticResource Primary}"/>
+                                <Setter Property="TextColor"
+                                        Value="White"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                </HorizontalStackLayout>
+            </ScrollView>
+
+        </VerticalStackLayout>
+ 
+        <CollectionView Grid.Row="3"
+                        ItemsSource="{Binding Tasks}"
+                        SelectionMode="None">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:TaskItem">
+
+                    <SwipeView Margin="0,0,0,10">
+ 
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Готово"
+                                           BackgroundColor="{StaticResource Success}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ToggleDoneCommand}"
+                                           CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+ 
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Видалити"
+                                           BackgroundColor="{StaticResource Danger}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTaskCommand}"
+                                           CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+ 
+                        <Border Style="{StaticResource TaskCard}">
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTaskCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+
+                            <Grid ColumnDefinitions="*,Auto"
+                                  RowDefinitions="Auto,Auto,Auto"
+                                  ColumnSpacing="10"
+                                  RowSpacing="8">
+
+                                <Label Grid.Row="0"
+                                       Text="{Binding Title}"
+                                       Style="{StaticResource TaskTitle}"
+                                       LineBreakMode="TailTruncation"/>
+
+                                <Label Grid.Row="1"
+                                       Text="{Binding Description}"
+                                       Style="{StaticResource MutedText}"
+                                       LineBreakMode="TailTruncation"/>
+
+                                <HorizontalStackLayout Grid.Row="2"
+                                                       Spacing="8"
+                                                       VerticalOptions="Center">
+
+                                    <Label Text="{Binding ProjectName}"
+                                           Style="{StaticResource SmallText}"/>
+
+                                    <Label Text="•"
+                                           TextColor="{StaticResource TextMuted}"/>
+
+                                    <Label Text="{Binding PriorityText}"
+                                           FontSize="11"
+                                           TextColor="{StaticResource Danger}"/>
+
+                                </HorizontalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="1"
+                                                     Grid.RowSpan="3"
+                                                     HorizontalOptions="End"
+                                                     VerticalOptions="Center"
+                                                     Spacing="8">
+
+                                    <Label Text="{Binding DueDate, StringFormat='{0:dd.MM.yyyy}'}"
+                                           Style="{StaticResource SmallText}"/>
+
+                                    <Border Style="{StaticResource StatusBadge}"
+                                            BackgroundColor="{StaticResource PrimaryLight}">
+
+                                        <Label Text="{Binding StatusText}"
+                                               FontSize="11"
+                                               TextColor="{StaticResource Primary}"/>
+
+                                    </Border>
+
+                                </VerticalStackLayout>
+
+                            </Grid>
+
+                        </Border>
+
+                    </SwipeView>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+</ContentPage>
